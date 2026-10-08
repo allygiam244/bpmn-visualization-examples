@@ -1,0 +1,220 @@
+// Generated from bpmn-files/ally_new_pc_request_authorization.bpmn
+// eslint-disable-next-line no-unused-vars
+function getAllyNewPcRequestDiagram() {
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Ally_Nuovo_PC" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_Ally_Nuovo_PC">
+    <bpmn:participant id="Participant_Ally" name="Ally - Autorizzazione richiesta nuovo PC" processRef="Process_Ally_Nuovo_PC" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Ally_Nuovo_PC" name="Autorizzazione richiesta nuovo PC" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Ally">
+      <bpmn:lane id="L_DIP" name="Dipendente">
+        <bpmn:flowNodeRef>Start_Necessita</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Compila</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Respinta_Resp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Firma</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Consegnato</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_RESP" name="Responsabile diretto">
+        <bpmn:flowNodeRef>Task_Valuta</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Timer_Sollecito</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Sollecito</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Sollecito</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Approvata</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_IT" name="IT / Help Desk">
+        <bpmn:flowNodeRef>Task_Verifica</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Disponibile</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Preventivo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Soglia</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_MergeConsegna</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Configura</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Consegna</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_AMM" name="Amministrazione / Direzione">
+        <bpmn:flowNodeRef>Task_Budget</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Budget</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Respinta_Budget</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_MergeOrdine</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Ordine</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Catch_Ricevuto</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_Necessita" name="Necessità di un nuovo PC">
+      <bpmn:outgoing>F01</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_Compila" name="Compila richiesta nuovo PC (motivazione, tipologia, urgenza)">
+      <bpmn:incoming>F01</bpmn:incoming>
+      <bpmn:outgoing>F02</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_Respinta_Resp" name="Richiesta respinta: notifica al dipendente">
+      <bpmn:incoming>F04</bpmn:incoming>
+      <bpmn:messageEventDefinition id="End_Respinta_Resp_Def" />
+    </bpmn:endEvent>
+    <bpmn:userTask id="Task_Firma" name="Firma verbale di consegna e restituisci vecchio PC">
+      <bpmn:incoming>F22</bpmn:incoming>
+      <bpmn:outgoing>F23</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_Consegnato" name="Nuovo PC consegnato">
+      <bpmn:incoming>F23</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Task_Valuta" name="Valuta e autorizza la richiesta">
+      <bpmn:incoming>F02</bpmn:incoming>
+      <bpmn:outgoing>F03</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="Timer_Sollecito" name="3 giorni senza risposta" cancelActivity="false" attachedToRef="Task_Valuta">
+      <bpmn:outgoing>F06</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="Timer_Sollecito_Def"><bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3D</bpmn:timeDuration></bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sendTask id="Task_Sollecito" name="Invia sollecito al responsabile">
+      <bpmn:incoming>F06</bpmn:incoming>
+      <bpmn:outgoing>F07</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="End_Sollecito" name="Sollecito inviato">
+      <bpmn:incoming>F07</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="GW_Approvata" name="Approvata dal responsabile?">
+      <bpmn:incoming>F03</bpmn:incoming>
+      <bpmn:outgoing>F04</bpmn:outgoing>
+      <bpmn:outgoing>F05</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Task_Verifica" name="Verifica disponibilità PC a magazzino">
+      <bpmn:incoming>F05</bpmn:incoming>
+      <bpmn:outgoing>F08</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GW_Disponibile" name="PC disponibile a magazzino?">
+      <bpmn:incoming>F08</bpmn:incoming>
+      <bpmn:outgoing>F09</bpmn:outgoing>
+      <bpmn:outgoing>F10</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Task_Preventivo" name="Definisci configurazione e richiedi preventivo">
+      <bpmn:incoming>F10</bpmn:incoming>
+      <bpmn:outgoing>F11</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GW_Soglia" name="Importo superiore a 1.500 €?">
+      <bpmn:incoming>F11</bpmn:incoming>
+      <bpmn:outgoing>F12</bpmn:outgoing>
+      <bpmn:outgoing>F13</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GW_MergeConsegna">
+      <bpmn:incoming>F09</bpmn:incoming>
+      <bpmn:incoming>F19</bpmn:incoming>
+      <bpmn:outgoing>F20</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Task_Configura" name="Prepara e configura PC (immagine, account, sicurezza)">
+      <bpmn:incoming>F20</bpmn:incoming>
+      <bpmn:outgoing>F21</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_Consegna" name="Consegna PC e aggiorna inventario asset">
+      <bpmn:incoming>F21</bpmn:incoming>
+      <bpmn:outgoing>F22</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Budget" name="Approva budget di spesa">
+      <bpmn:incoming>F12</bpmn:incoming>
+      <bpmn:outgoing>F14</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GW_Budget" name="Budget approvato?">
+      <bpmn:incoming>F14</bpmn:incoming>
+      <bpmn:outgoing>F15</bpmn:outgoing>
+      <bpmn:outgoing>F16</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Respinta_Budget" name="Richiesta respinta: notifica al dipendente">
+      <bpmn:incoming>F16</bpmn:incoming>
+      <bpmn:messageEventDefinition id="End_Respinta_Budget_Def" />
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="GW_MergeOrdine">
+      <bpmn:incoming>F13</bpmn:incoming>
+      <bpmn:incoming>F15</bpmn:incoming>
+      <bpmn:outgoing>F17</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Task_Ordine" name="Emetti ordine d'acquisto al fornitore">
+      <bpmn:incoming>F17</bpmn:incoming>
+      <bpmn:outgoing>F18</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateCatchEvent id="Catch_Ricevuto" name="PC ricevuto dal fornitore">
+      <bpmn:incoming>F18</bpmn:incoming>
+      <bpmn:outgoing>F19</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="Catch_Ricevuto_Def" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="F01" sourceRef="Start_Necessita" targetRef="Task_Compila" />
+    <bpmn:sequenceFlow id="F02" sourceRef="Task_Compila" targetRef="Task_Valuta" />
+    <bpmn:sequenceFlow id="F03" sourceRef="Task_Valuta" targetRef="GW_Approvata" />
+    <bpmn:sequenceFlow id="F04" name="No" sourceRef="GW_Approvata" targetRef="End_Respinta_Resp" />
+    <bpmn:sequenceFlow id="F05" name="Sì" sourceRef="GW_Approvata" targetRef="Task_Verifica" />
+    <bpmn:sequenceFlow id="F06" sourceRef="Timer_Sollecito" targetRef="Task_Sollecito" />
+    <bpmn:sequenceFlow id="F07" sourceRef="Task_Sollecito" targetRef="End_Sollecito" />
+    <bpmn:sequenceFlow id="F08" sourceRef="Task_Verifica" targetRef="GW_Disponibile" />
+    <bpmn:sequenceFlow id="F09" name="Sì" sourceRef="GW_Disponibile" targetRef="GW_MergeConsegna" />
+    <bpmn:sequenceFlow id="F10" name="No" sourceRef="GW_Disponibile" targetRef="Task_Preventivo" />
+    <bpmn:sequenceFlow id="F11" sourceRef="Task_Preventivo" targetRef="GW_Soglia" />
+    <bpmn:sequenceFlow id="F12" name="Sì" sourceRef="GW_Soglia" targetRef="Task_Budget" />
+    <bpmn:sequenceFlow id="F13" name="No" sourceRef="GW_Soglia" targetRef="GW_MergeOrdine" />
+    <bpmn:sequenceFlow id="F14" sourceRef="Task_Budget" targetRef="GW_Budget" />
+    <bpmn:sequenceFlow id="F15" name="Sì" sourceRef="GW_Budget" targetRef="GW_MergeOrdine" />
+    <bpmn:sequenceFlow id="F16" name="No" sourceRef="GW_Budget" targetRef="End_Respinta_Budget" />
+    <bpmn:sequenceFlow id="F17" sourceRef="GW_MergeOrdine" targetRef="Task_Ordine" />
+    <bpmn:sequenceFlow id="F18" sourceRef="Task_Ordine" targetRef="Catch_Ricevuto" />
+    <bpmn:sequenceFlow id="F19" sourceRef="Catch_Ricevuto" targetRef="GW_MergeConsegna" />
+    <bpmn:sequenceFlow id="F20" sourceRef="GW_MergeConsegna" targetRef="Task_Configura" />
+    <bpmn:sequenceFlow id="F21" sourceRef="Task_Configura" targetRef="Task_Consegna" />
+    <bpmn:sequenceFlow id="F22" sourceRef="Task_Consegna" targetRef="Task_Firma" />
+    <bpmn:sequenceFlow id="F23" sourceRef="Task_Firma" targetRef="End_Consegnato" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Ally_Nuovo_PC">
+    <bpmndi:BPMNPlane id="BPMNPlane_Ally_Nuovo_PC" bpmnElement="Collaboration_Ally_Nuovo_PC">
+      <bpmndi:BPMNShape id="Participant_Ally_di" bpmnElement="Participant_Ally" isHorizontal="true"><dc:Bounds x="160" y="80" width="2400" height="820" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="L_DIP_di" bpmnElement="L_DIP" isHorizontal="true"><dc:Bounds x="190" y="80" width="2370" height="160" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="L_RESP_di" bpmnElement="L_RESP" isHorizontal="true"><dc:Bounds x="190" y="240" width="2370" height="220" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="L_IT_di" bpmnElement="L_IT" isHorizontal="true"><dc:Bounds x="190" y="460" width="2370" height="220" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="L_AMM_di" bpmnElement="L_AMM" isHorizontal="true"><dc:Bounds x="190" y="680" width="2370" height="220" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_Necessita_di" bpmnElement="Start_Necessita"><dc:Bounds x="232" y="142" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="195" y="183" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Compila_di" bpmnElement="Task_Compila"><dc:Bounds x="310" y="120" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Respinta_Resp_di" bpmnElement="End_Respinta_Resp"><dc:Bounds x="632" y="142" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="676" y="146" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Firma_di" bpmnElement="Task_Firma"><dc:Bounds x="2290" y="120" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Consegnato_di" bpmnElement="End_Consegnato"><dc:Bounds x="2472" y="142" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="2435" y="183" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Valuta_di" bpmnElement="Task_Valuta"><dc:Bounds x="480" y="280" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Timer_Sollecito_di" bpmnElement="Timer_Sollecito"><dc:Bounds x="522" y="342" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="562" y="364" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Sollecito_di" bpmnElement="Task_Sollecito"><dc:Bounds x="330" y="370" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Sollecito_di" bpmnElement="End_Sollecito"><dc:Bounds x="250" y="392" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="213" y="433" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Approvata_di" bpmnElement="GW_Approvata" isMarkerVisible="true"><dc:Bounds x="625" y="295" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="680" y="267" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Verifica_di" bpmnElement="Task_Verifica"><dc:Bounds x="720" y="500" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Disponibile_di" bpmnElement="GW_Disponibile" isMarkerVisible="true"><dc:Bounds x="905" y="515" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="875" y="570" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Preventivo_di" bpmnElement="Task_Preventivo"><dc:Bounds x="1000" y="500" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Soglia_di" bpmnElement="GW_Soglia" isMarkerVisible="true"><dc:Bounds x="1165" y="515" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1135" y="570" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_MergeConsegna_di" bpmnElement="GW_MergeConsegna" isMarkerVisible="true"><dc:Bounds x="1855" y="515" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Configura_di" bpmnElement="Task_Configura"><dc:Bounds x="1950" y="500" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Consegna_di" bpmnElement="Task_Consegna"><dc:Bounds x="2120" y="500" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Budget_di" bpmnElement="Task_Budget"><dc:Bounds x="1240" y="730" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Budget_di" bpmnElement="GW_Budget" isMarkerVisible="true"><dc:Bounds x="1405" y="745" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1385" y="715" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Respinta_Budget_di" bpmnElement="End_Respinta_Budget"><dc:Bounds x="1412" y="842" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1456" y="846" width="110" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_MergeOrdine_di" bpmnElement="GW_MergeOrdine" isMarkerVisible="true"><dc:Bounds x="1505" y="745" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Ordine_di" bpmnElement="Task_Ordine"><dc:Bounds x="1590" y="730" width="120" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Catch_Ricevuto_di" bpmnElement="Catch_Ricevuto"><dc:Bounds x="1762" y="752" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1732" y="793" width="96" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F01_di" bpmnElement="F01"><di:waypoint x="268" y="160" /><di:waypoint x="310" y="160" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F02_di" bpmnElement="F02"><di:waypoint x="430" y="160" /><di:waypoint x="540" y="160" /><di:waypoint x="540" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F03_di" bpmnElement="F03"><di:waypoint x="600" y="320" /><di:waypoint x="625" y="320" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F04_di" bpmnElement="F04"><di:waypoint x="650" y="295" /><di:waypoint x="650" y="178" /><bpmndi:BPMNLabel><dc:Bounds x="655" y="230" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F05_di" bpmnElement="F05"><di:waypoint x="650" y="345" /><di:waypoint x="650" y="540" /><di:waypoint x="720" y="540" /><bpmndi:BPMNLabel><dc:Bounds x="655" y="436" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F06_di" bpmnElement="F06"><di:waypoint x="540" y="378" /><di:waypoint x="540" y="410" /><di:waypoint x="450" y="410" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F07_di" bpmnElement="F07"><di:waypoint x="330" y="410" /><di:waypoint x="286" y="410" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F08_di" bpmnElement="F08"><di:waypoint x="840" y="540" /><di:waypoint x="905" y="540" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F09_di" bpmnElement="F09"><di:waypoint x="930" y="515" /><di:waypoint x="930" y="480" /><di:waypoint x="1880" y="480" /><di:waypoint x="1880" y="515" /><bpmndi:BPMNLabel><dc:Bounds x="935" y="490" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F10_di" bpmnElement="F10"><di:waypoint x="955" y="540" /><di:waypoint x="1000" y="540" /><bpmndi:BPMNLabel><dc:Bounds x="970" y="522" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F11_di" bpmnElement="F11"><di:waypoint x="1120" y="540" /><di:waypoint x="1165" y="540" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F12_di" bpmnElement="F12"><di:waypoint x="1190" y="565" /><di:waypoint x="1190" y="770" /><di:waypoint x="1240" y="770" /><bpmndi:BPMNLabel><dc:Bounds x="1195" y="660" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13"><di:waypoint x="1215" y="540" /><di:waypoint x="1530" y="540" /><di:waypoint x="1530" y="745" /><bpmndi:BPMNLabel><dc:Bounds x="1364" y="522" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F14_di" bpmnElement="F14"><di:waypoint x="1360" y="770" /><di:waypoint x="1405" y="770" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15"><di:waypoint x="1455" y="770" /><di:waypoint x="1505" y="770" /><bpmndi:BPMNLabel><dc:Bounds x="1472" y="752" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F16_di" bpmnElement="F16"><di:waypoint x="1430" y="795" /><di:waypoint x="1430" y="842" /><bpmndi:BPMNLabel><dc:Bounds x="1435" y="812" width="20" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F17_di" bpmnElement="F17"><di:waypoint x="1555" y="770" /><di:waypoint x="1590" y="770" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F18_di" bpmnElement="F18"><di:waypoint x="1710" y="770" /><di:waypoint x="1762" y="770" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F19_di" bpmnElement="F19"><di:waypoint x="1798" y="770" /><di:waypoint x="1880" y="770" /><di:waypoint x="1880" y="565" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F20_di" bpmnElement="F20"><di:waypoint x="1905" y="540" /><di:waypoint x="1950" y="540" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F21_di" bpmnElement="F21"><di:waypoint x="2070" y="540" /><di:waypoint x="2120" y="540" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F22_di" bpmnElement="F22"><di:waypoint x="2240" y="540" /><di:waypoint x="2350" y="540" /><di:waypoint x="2350" y="200" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F23_di" bpmnElement="F23"><di:waypoint x="2410" y="160" /><di:waypoint x="2472" y="160" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
+`;
+}

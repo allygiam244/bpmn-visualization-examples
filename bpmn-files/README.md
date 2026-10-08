@@ -53,3 +53,6 @@ Feel free to create a PR to update the image if the discrepancies are too large.
 [Sequence flows Labels](label_sequence_flows.bpmn)
 ![Sequence flows labels](./label_sequence_flows__bpmnio.svg)
 
+
+[Ally - Autorizzazione richiesta nuovo PC](./ally_new_pc_request_authorization.bpmn)
+![ally new pc request](../examples/static/img/preview/display-bpmn-diagram/ally-new-pc-request.png)

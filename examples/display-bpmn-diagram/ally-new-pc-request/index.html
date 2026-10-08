@@ -1,0 +1,70 @@
+<!--
+Copyright 2020 Bonitasoft S.A.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>bpmn-visualization - Ally: autorizzazione richiesta nuovo PC</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <link rel="stylesheet" href="../../static/css/spectre.min.css" type="text/css">
+    <link rel="stylesheet" href="../../static/css/icons.min.css" type="text/css">
+    <link rel="stylesheet" href="../../static/css/main.css" type="text/css">
+    <style>
+        .bpmn-container {
+            height: 650px;
+            border: 1px solid #B0B0B0;
+            overflow: hidden;
+        }
+    </style>
+    <script defer src="../../static/js/link-to-sources.js"></script>
+    <!-- load bpmn-visualization -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bpmn-visualization@0.48.0/dist/bpmn-visualization.min.js" integrity="sha384-NRsOkK0vzHys+YUCN4gyKP53VEnmFOttUAN1Gu2CYPyEhLmKD2C6hObYtBhwy9nB" crossorigin="anonymous"></script>
+    <script defer src="diagram.js"></script>
+    <script defer src="index.js"></script>
+</head>
+<body>
+<header class="navbar bg-dark p-2">
+    <section class="navbar-section ml-2">
+        <a class="home" href="../../index.html">
+            <img src="../../static/img/logo_64x64_white.png" alt="logo" class="logo">
+            <span class="h3 text-light ml-2 lib-name-text">bpmn-visualization examples</span>
+        </a>
+    </section>
+    <section class="navbar-section">
+        <a href="https://process-analytics.github.io/bpmn-visualization-js/" class="mr-2 btn btn-secondary">Docs</a>
+        <div class="dropdown mr-2">
+            <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
+                GitHub <span class="icon icon-caret icon-in-the-middle"></span>
+            </a>
+            <ul class="menu">
+                <li><a href="https://github.com/process-analytics/bpmn-visualization-js" class="mr-2 btn btn-link">Library</a></li>
+                <li><a href="https://github.com/process-analytics/bpmn-visualization-examples" class="mr-2 btn btn-link">Examples</a></li>
+            </ul>
+        </div>
+    </section>
+</header>
+<section class="container" style="margin-top: 3rem">
+    <div class="col-11 col-mx-auto">
+        <h2>Ally - Autorizzazione richiesta nuovo PC</h2>
+        <p>
+            Workflow per autorizzare la richiesta di un nuovo PC: il dipendente compila la richiesta, il responsabile
+            la autorizza (con sollecito automatico dopo 3 giorni), l'IT verifica la disponibilità a magazzino e, se serve
+            un acquisto oltre 1.500 €, l'Amministrazione approva il budget prima dell'ordine.<br>
+            Passa il mouse su un'attività per vederne il dettaglio.
+        </p>
+        <div id="bpmn-container" class="bpmn-container"></div>
+    </div>
+</section>
+</body>
+</html>
